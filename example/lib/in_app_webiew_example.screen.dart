@@ -18,9 +18,13 @@ class _InAppWebViewExampleScreenState extends State<InAppWebViewExampleScreen> {
   String url = "";
   double progress = 0;
   CookieManager _cookieManager = CookieManager.instance();
-  String script = """
+  String script = """ function click() { 
                          const refreshBtn = document.querySelector('.loadboard-reload__refresh-icon--reload-icon');
-                         refreshBtn.click()
+                         refreshBtn.click() 
+                         };
+                         """;
+
+  String script2 = """ click(); 
                          """;
 
   @override
@@ -118,6 +122,8 @@ class _InAppWebViewExampleScreenState extends State<InAppWebViewExampleScreen> {
                     setState(() {
                       this.url = url;
                     });
+
+                    webView.evaluateJavascript(source: script);
                   },
                   onProgressChanged:
                       (InAppWebViewController controller, int progress) {
@@ -139,13 +145,12 @@ class _InAppWebViewExampleScreenState extends State<InAppWebViewExampleScreen> {
             children: <Widget>[
               RaisedButton(
                 child: Icon(Icons.arrow_back),
-                onPressed: () {
+                  onPressed: () {
                   if (webView != null) {
                     //  webView.javaScriptCanOpenWindowsAutomatically;
                     //  const script="const zz=document.querySelector('.btn-collapser'); zz.click();";
+                    clickRefresh();
 
-                    print("click");
-                    webView.evaluateJavascript(source: script);
                     //  webView.goBack();
                   }
                 },
@@ -169,5 +174,12 @@ class _InAppWebViewExampleScreenState extends State<InAppWebViewExampleScreen> {
             ],
           ),
         ])));
+  }
+
+
+  void clickRefresh() async {
+    print("click2");
+    String result3 = await webView.evaluateJavascript(source: script2);
+    print (result3);
   }
 }
